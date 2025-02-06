@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Bag Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .shopping-info {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .shopping-info span {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            font-size: 1.2em;
+            padding: 15px;
+            border-radius: 6px;
+            background-color: #009688;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: none;
+            width: 200px;
+            text-align: center;
+        }
+
+        button:hover {
+            background-color: #00796b;
+        }
+
+        button:active {
+            background-color: #004d40;
+        }
+
+        .remove {
+            background-color: #f44336;
+        }
+
+        .remove:hover {
+            background-color: #e53935;
+        }
+
+        .clear {
+            background-color: #ff9800;
+        }
+
+        .clear:hover {
+            background-color: #fb8c00;
+        }
+
+        .total {
+            background-color: #4caf50;
+            width: 100%;
+        }
+
+        .total:hover {
+            background-color: #388e3c;
+        }
+
+        .items-list {
+            font-size: 1.2em;
+        }
+
+        .item {
+            margin: 5px 0;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="shopping-info">
+        <span id="total-display">Total Amount: ₹0</span>
+        <span id="budget-display">Available Budget: ₹500</span>
+        <span id="remaining-display">Remaining: ₹500</span>
+        <div class="items-list" id="items-list"></div>
+    </div>
+
+    <div class="buttons">
+        <button onclick="addItem(30, 'Tomato')">Tomato ₹30</button>
+        <button onclick="addItem(40, 'Potato')">Potato ₹40</button>
+        <button onclick="addItem(50, 'Onion')">Onion ₹50</button>
+        <button onclick="addItem(20, 'Carrot')">Carrot ₹20</button>
+        <button onclick="addItem(60, 'Cucumber')">Cucumber ₹60</button>
+        <button onclick="addItem(100, 'Spinach')">Spinach ₹100</button>
+        <button class="remove" onclick="removeLastItem()">Remove Last Item</button>
+        <button class="clear" onclick="clearCart()">Clear Cart</button>
+        <button class="total" onclick="showTotal()">Show Total</button>
+    </div>
+
+    <script>
+        let totalPrice = 0;
+        let selectedItems = [];
+        let budget = 500;  // Available budget
+
+        function addItem(price, item) {
+            if (totalPrice + price > budget) {
+                alert("Not enough money! You can't add this item.");
+                return;
+            }
+
+            totalPrice += price;
+            selectedItems.push(item);
+            updateDisplay();
+            updateItemsList();
+        }
+
+        function removeLastItem() {
+            if (selectedItems.length > 0) {
+                const lastItem = selectedItems.pop();
+                const itemPrice = getItemPrice(lastItem);
+                totalPrice -= itemPrice;
+                updateDisplay();
+                updateItemsList();
+            }
+        }
+
+        function clearCart() {
+            totalPrice = 0;
+            selectedItems = [];
+            updateDisplay();
+            updateItemsList();
+        }
+
+        function showTotal() {
+            alert(`Total Price: ₹${totalPrice}`);
+        }
+
+        function updateDisplay() {
+            const remainingMoney = budget - totalPrice;
+            document.getElementById('total-display').textContent = `Total Amount: ₹${totalPrice}`;
+            document.getElementById('remaining-display').textContent = `Remaining: ₹${remainingMoney}`;
+        }
+
+        function updateItemsList() {
+            const itemsList = document.getElementById('items-list');
+            itemsList.innerHTML = "";
+            selectedItems.forEach(item => {
+                const itemElement = document.createElement("div");
+                itemElement.className = "item";
+                itemElement.textContent = item;
+                itemsList.appendChild(itemElement);
+            });
+        }
+
+        function getItemPrice(item) {
+            switch (item) {
+                case 'Tomato': return 30;
+                case 'Potato': return 40;
+                case 'Onion': return 50;
+                case 'Carrot': return 20;
+                case 'Cucumber': return 60;
+                case 'Spinach': return 100;
+                default: return 0;
+            }
+        }
+    </script>
+</body>
+
+</html>
